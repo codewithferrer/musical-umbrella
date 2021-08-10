@@ -8,3 +8,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "musical-umbrella"
 include ':app'
+include ':musicalumbrella'

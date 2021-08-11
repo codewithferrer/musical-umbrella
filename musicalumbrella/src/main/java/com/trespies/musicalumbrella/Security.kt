@@ -10,14 +10,22 @@ import java.io.File
 public class Security constructor(private val app: Application, private val configuration: SecurityConfiguration) {
 
     public fun checkSecurity() {
-        isDebuggable()
-        isDebuggerAttached()
-        validateAppName()
-        validateAppSignature()
-        validateAppInstaller()
-        isRunningInEmulator()
-        checkEmulatorFiles()
-        validateRootedDevice()
+        if (configuration.checkIsDebuggable)
+            isDebuggable()
+        if (configuration.ckeckIsDebuggerAttached)
+            isDebuggerAttached()
+        if (configuration.checkAppName)
+            validateAppName()
+        if (configuration.checkAppSignature)
+            validateAppSignature()
+        if (configuration.checkAppInstaller)
+            validateAppInstaller()
+        if (configuration.checkRunInEmulator) {
+            isRunningInEmulator()
+            checkEmulatorFiles()
+        }
+        if (configuration.checkRootedDevice)
+            validateRootedDevice()
     }
 
     private fun isDebuggable() {
@@ -40,7 +48,7 @@ public class Security constructor(private val app: Application, private val conf
         val isSamePackageName = app.packageName == configuration.packageName
 
         if (isSamePackageName) {
-            throw SecurityPackageNameException()
+            throw SecurityPackageNameException(app.packageName)
         }
 
     }
@@ -49,7 +57,7 @@ public class Security constructor(private val app: Application, private val conf
         val appSignatureValidate = AppSignatureValidator.validate(app, configuration)
 
         if (appSignatureValidate != Result.VALID) {
-            throw SecurityInvalidSignatureException()
+            throw SecurityInvalidSignatureException(AppSignatureValidator.getAppSignature(app) ?: "Signature not found")
         }
     }
 
@@ -57,7 +65,7 @@ public class Security constructor(private val app: Application, private val conf
         val appInstallerValidate = AppInstallerValidator.validate(app)
 
         if (appInstallerValidate != Result.VALID) {
-            throw SecurityInvalidInstallerException()
+            throw SecurityInvalidInstallerException(AppInstallerValidator.getInstaller(app) ?: "Installer not found")
         }
     }
 
@@ -79,7 +87,9 @@ public class Security constructor(private val app: Application, private val conf
                 || Build.BOARD.toLowerCase().contains("nox")
                 || (Build.BRAND.startsWith("generic") &&    Build.DEVICE.startsWith("generic")))
         if (isEmulator) {
-            throw SecurityEmulatorException()
+            throw SecurityEmulatorException("""Manufacter: ${Build.MANUFACTURER}, Model: ${Build.MODEL}, 
+                    Hardware: ${Build.HARDWARE}, Fingerprint: ${Build.FINGERPRINT},
+                    Product: ${Build.PRODUCT}, Board: ${Build.BOARD}, Brand: ${Build.BRAND}, Device: ${Build.DEVICE}""")
         }
     }
 
@@ -124,7 +134,7 @@ public class Security constructor(private val app: Application, private val conf
                 || checkFiles(PIPES))
 
         if (isEmulatorFiles) {
-            throw SecurityEmulatorException()
+            throw SecurityEmulatorException("Found emulator files")
         }
     }
 

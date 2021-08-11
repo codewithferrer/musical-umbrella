@@ -25,4 +25,12 @@ public object AppInstallerValidator {
             packageManager.getInstallerPackageName(packageName)?.startsWith(installer.id) == true
         }
     }
+
+    public fun getInstaller(context: Context): String? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            context.packageManager.getInstallSourceInfo(context.packageName).originatingPackageName
+        } else {
+            context.packageManager.getInstallerPackageName(context.packageName)
+        }
+    }
 }

@@ -24,7 +24,7 @@ public class Security constructor(private val app: Application, private val conf
         val isDebuggable = app.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
 
         if (isDebuggable) {
-            throw SecurityException("You cannot run this app when is debuggable")
+            throw SecurityDebuggableException()
         }
     }
 
@@ -32,7 +32,7 @@ public class Security constructor(private val app: Application, private val conf
         val isDebuggerAttached = Debug.isDebuggerConnected() || Debug.waitingForDebugger()
 
         if (isDebuggerAttached) {
-            throw SecurityException("You cannot run this app when debugger is attached")
+            throw SecurityDebuggerAttachedException()
         }
     }
 
@@ -40,7 +40,7 @@ public class Security constructor(private val app: Application, private val conf
         val isSamePackageName = app.packageName == configuration.packageName
 
         if (isSamePackageName) {
-            throw SecurityException("You cannot run this app, the name is changed")
+            throw SecurityPackageNameException()
         }
 
     }
@@ -49,7 +49,7 @@ public class Security constructor(private val app: Application, private val conf
         val appSignatureValidate = AppSignatureValidator.validate(app, configuration)
 
         if (appSignatureValidate != Result.VALID) {
-            throw SecurityException("You cannot run this app, signature is not valid")
+            throw SecurityInvalidSignatureException()
         }
     }
 
@@ -57,7 +57,7 @@ public class Security constructor(private val app: Application, private val conf
         val appInstallerValidate = AppInstallerValidator.validate(app)
 
         if (appInstallerValidate != Result.VALID) {
-            throw SecurityException("You cannot run this app, installer it not valid")
+            throw SecurityInvalidInstallerException()
         }
     }
 
@@ -79,7 +79,7 @@ public class Security constructor(private val app: Application, private val conf
                 || Build.BOARD.toLowerCase().contains("nox")
                 || (Build.BRAND.startsWith("generic") &&    Build.DEVICE.startsWith("generic")))
         if (isEmulator) {
-            throw SecurityException("You cannot run this app in an emulator")
+            throw SecurityEmulatorException()
         }
     }
 
@@ -124,7 +124,7 @@ public class Security constructor(private val app: Application, private val conf
                 || checkFiles(PIPES))
 
         if (isEmulatorFiles) {
-            throw SecurityException("You cannot run this app in an emulator")
+            throw SecurityEmulatorException()
         }
     }
 
@@ -133,7 +133,7 @@ public class Security constructor(private val app: Application, private val conf
         val isRooted = rootBeer.isRooted &&
                 rootBeer.isRootedWithBusyBoxCheck
         if (isRooted) {
-            throw SecurityException("You cannot run this app on a rooted device")
+            throw SecurityRootedDeviceException()
         }
     }
 

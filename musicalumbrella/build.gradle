@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'maven-publish'
 }
 
 android {
@@ -40,3 +41,12 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
+
+ext {
+    // Provide your own coordinates here
+    PUBLISH_GROUP_ID = 'es.3pies'
+    PUBLISH_VERSION = '0.1.0'
+    PUBLISH_ARTIFACT_ID = 'musicalumbrella'
+}
+
+apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"

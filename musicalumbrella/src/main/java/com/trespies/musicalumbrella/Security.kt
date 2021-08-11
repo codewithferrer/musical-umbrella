@@ -47,7 +47,7 @@ public class Security constructor(private val app: Application, private val conf
     private fun validateAppName() {
         val isSamePackageName = (app.packageName.equals(configuration.packageName, ignoreCase = true))
 
-        if (isSamePackageName) {
+        if (!isSamePackageName) {
             throw SecurityPackageNameException(app.packageName)
         }
 

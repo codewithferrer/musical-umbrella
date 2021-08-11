@@ -12,7 +12,7 @@ public object AppSignatureValidator {
 
     public fun validate(context: Context, configuration: SecurityConfiguration): Result {
         getAppSignature(context)?.let { currentSignature ->
-            return if (currentSignature == configuration.expectedSignature) {
+            return if (currentSignature.equals(configuration.expectedSignature, ignoreCase = true)) {
                 Result.VALID
             } else { Result.INVALID }
         }

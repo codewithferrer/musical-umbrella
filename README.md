@@ -17,6 +17,25 @@ Uso
    Además de activar/desactivar las comprobaciones que consideres necesarias.
 2. Invoca el método `checkSecurity`, este lanzará una excepción especializada en caso de encontrar uno de los puntos anteriores.
 
+```java
+
+  val security = Security(application, object: SecurityConfiguration {
+      override val expectedSignature: String
+          get() = "YOUR_APP_SIGNATURE"
+      override val packageName: String
+          get() = "YOUR_PACKAGE_NAME"
+  })
+  
+  security.checkSecurity()
+
+```
+
+Adicionalmente, se ha implementado un método para poder obtener la firma de la aplicación, con el fin de colocar en el ejemplo anterior
+
+```java
+  AppSignatureValidator.getAppSignature(context)
+```
+
 Instalación
 -----
 

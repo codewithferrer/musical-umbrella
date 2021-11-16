@@ -51,7 +51,7 @@ Mención
 -----
 
 Para publicar esta librería en Sonatype he seguido este tutorial. Después de revisar bastantes, este ha sido el que me ha ayudado a subir la librería
-https://s01.oss.sonatype.org/content/repositories/snapshots/
+https://getstream.io/blog/publishing-libraries-to-mavencentral-2021/
 
 Para la comprobación del dispositivo rooteado, se utiliza Rootbeer. Podéis encontrar más info sobre ella aquí:
 https://github.com/scottyab/rootbeer
